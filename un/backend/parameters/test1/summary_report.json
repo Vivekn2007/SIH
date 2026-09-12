@@ -1,0 +1,75 @@
+{
+    "project": "Electronic Warfare Smart Scan Scheduler",
+    "architecture": "Deep Q-Network (DQN) + MLP Arrival Predictor",
+    "hardware_specs": {
+        "spectrum_coverage_mhz": "500 - 18000",
+        "instantaneous_bandwidth_mhz": 500.0,
+        "total_bands": 36,
+        "retuning_latency_penalty_per_band": 0.08
+    },
+    "figures_of_merit": [
+        {
+            "Metric": "P_d (Detection Probability)",
+            "DQN_Value": 0.9306,
+            "Baseline_Value": 0.6765,
+            "Delta": "+0.2542",
+            "Verdict": "Superior (+37.5%)"
+        },
+        {
+            "Metric": "P_fa (False Alarm Probability)",
+            "DQN_Value": 0.0184,
+            "Baseline_Value": 0.0204,
+            "Delta": "-0.0020",
+            "Verdict": "Superior (-9.8%)"
+        },
+        {
+            "Metric": "Receiver Sensitivity (dBm)",
+            "DQN_Value": -109.8,
+            "Baseline_Value": -109.9,
+            "Delta": "+0.1 dBm",
+            "Verdict": "Nominal"
+        },
+        {
+            "Metric": "Avg Intercept Rate (raw)",
+            "DQN_Value": 0.0378,
+            "Baseline_Value": 0.0182,
+            "Delta": "+0.0196",
+            "Verdict": "Superior (+107.7%)"
+        },
+        {
+            "Metric": "Avg Intercept Rate (Wall-Clock)",
+            "DQN_Value": 0.0367,
+            "Baseline_Value": 0.0169,
+            "Delta": "+0.0198",
+            "Verdict": "Superior (+117.1%)"
+        },
+        {
+            "Metric": "Avg Reward / Step Cost",
+            "DQN_Value": 0.3671,
+            "Baseline_Value": 0.1285,
+            "Delta": "+0.2386",
+            "Verdict": "Superior (+185.6%)"
+        },
+        {
+            "Metric": "Prediction Accuracy (%)",
+            "DQN_Value": 4.0593,
+            "Baseline_Value": 2.6868,
+            "Delta": "+1.3725%",
+            "Verdict": "Superior (+51.1%)"
+        },
+        {
+            "Metric": "Avg Intercept Time Error (slots)",
+            "DQN_Value": 20.7495,
+            "Baseline_Value": 24.15,
+            "Delta": "-3.4005",
+            "Verdict": "Superior (-14.1%)"
+        },
+        {
+            "Metric": "Avg First Intercept Delay (slots)",
+            "DQN_Value": 44.25,
+            "Baseline_Value": 47.9613,
+            "Delta": "-3.7113",
+            "Verdict": "Superior (-7.7%)"
+        }
+    ]
+}

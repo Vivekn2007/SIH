@@ -1,0 +1,10 @@
+Metric,DQN_Value,Baseline_Value,Delta,Verdict
+P_d (Detection Probability),0.9306,0.6765,+0.2542,Superior (+37.5%)
+P_fa (False Alarm Probability),0.0184,0.0204,-0.0020,Superior (-9.8%)
+Receiver Sensitivity (dBm),-109.8,-109.9,+0.1 dBm,Nominal
+Avg Intercept Rate (raw),0.0378,0.0182,+0.0196,Superior (+107.7%)
+Avg Intercept Rate (Wall-Clock),0.0367,0.0169,+0.0198,Superior (+117.1%)
+Avg Reward / Step Cost,0.3671,0.1285,+0.2386,Superior (+185.6%)
+Prediction Accuracy (%),4.0593,2.6868,+1.3725%,Superior (+51.1%)
+Avg Intercept Time Error (slots),20.7495,24.15,-3.4005,Superior (-14.1%)
+Avg First Intercept Delay (slots),44.25,47.9613,-3.7113,Superior (-7.7%)

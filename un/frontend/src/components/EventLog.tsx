@@ -1,0 +1,6 @@
+import { useEffect, useRef, useState } from 'react'
+import { AlertTriangle, Check, X } from 'lucide-react'
+import { Panel } from './Panel'
+import type { Telemetry } from '../types'
+type EventItem={at:string;text:string;type:string;severity:string}
+export function EventLog({ telemetry }: { telemetry: Telemetry | null }) {const [events,setEvents]=useState<EventItem[]>([]),[filter,setFilter]=useState('ALL');const last=useRef(0);useEffect(()=>{if(telemetry&&telemetry.step!==last.current){last.current=telemetry.step;setEvents(e=>[{at:telemetry.sim_time,text:telemetry.event.text,type:telemetry.event.type,severity:telemetry.event.severity},...e].slice(0,40))}},[telemetry]);const shown=filter==='ALL'?events:events.filter(e=>e.type.toUpperCase()===filter|| (filter==='ALERTS'&&e.type==='alert'));return <Panel title="EVENT LOG" className="log-panel" action={<div className="tabs">{['ALL','DETECTION','TRACKING','ALERTS','SYSTEM'].map(x=><button className={filter===x?'active':''} onClick={()=>setFilter(x)} key={x}>{x}</button>)}</div>}><div className="events">{shown.map((e,i)=>{const Icon=e.severity==='ok'?Check:e.severity==='threat'?X:AlertTriangle;return <div className={`event ${e.severity}`} key={`${e.at}-${i}`}><time>{e.at}</time><Icon size={13}/><span>{e.text}</span></div>})}{!shown.length&&<div className="empty">Awaiting telemetry…</div>}</div></Panel>}
