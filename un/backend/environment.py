@@ -74,27 +74,36 @@ class RFEnvironment:
         return config.BAND_BASE_GHZ + band_id * config.BAND_STEP_GHZ
 
     def _synthetic_tick(self) -> list[dict[str, Any]]:
-        # Markov-like persistence gives emitters realistic dwell time, while NumPy generates all bands at once.
-        starts = self.rng.random(self.band_count) < 0.07
-        stops = self.rng.random(self.band_count) < 0.15
+        # Markov model with higher persistence (longer dwell on each band) and
+        # stronger signal power → more detectable emitters, fewer missed scans.
+        starts = self.rng.random(self.band_count) < 0.10   # ↑ from 0.07 — more emitters turn on
+        stops  = self.rng.random(self.band_count) < 0.08   # ↓ from 0.15 — emitters stay longer
         self._active = np.where(self._active, ~stops, starts)
         if not self._active.any():
             self._active[self.rng.integers(0, self.band_count)] = True
-        retunes = self.rng.random(self.band_count) < 0.08
-        self._aoa = (self._aoa + self.rng.normal(0, 1.8, self.band_count)) % 360
-        self._class_idx = np.where(retunes, self.rng.integers(0, len(CLASSES), self.band_count), self._class_idx)
-        self._threat_idx = np.where(retunes, self.rng.choice([0, 1, 2], self.band_count, p=[0.58, 0.28, 0.14]), self._threat_idx)
-        self._power = np.where(self._active, self.rng.normal(-42, 12, self.band_count), self.rng.normal(-104, 3.5, self.band_count))
+        retunes = self.rng.random(self.band_count) < 0.05  # ↓ from 0.08 — more stable emitters
+        self._aoa = (self._aoa + self.rng.normal(0, 1.2, self.band_count)) % 360  # smoother AoA drift
+        self._class_idx  = np.where(retunes, self.rng.integers(0, len(CLASSES), self.band_count), self._class_idx)
+        self._threat_idx = np.where(retunes, self.rng.choice([0, 1, 2], self.band_count,
+                                    p=[0.50, 0.32, 0.18]), self._threat_idx)  # ↑ more high-threat emitters
+        # Active bands: stronger signal mean (−38 dBm ↑ from −42) with tighter spread
+        self._power = np.where(self._active,
+                               self.rng.normal(-38, 8, self.band_count),  # stronger signal
+                               self.rng.normal(-104, 3.0, self.band_count))  # quieter noise floor
         active_ids = np.flatnonzero(self._active)
         return [
             {
-                "id": f"E-{self._emitter_num[i]:03d}", "band_id": int(i), "freq_ghz": round(self._frequency(int(i)), 2),
-                "power_dbm": round(float(self._power[i]), 1), "aoa_deg": round(float(self._aoa[i]), 1),
-                "pulse_width_us": round(float(self.rng.uniform(0.4, 18)), 2), "class": str(CLASSES[self._class_idx[i]]),
+                "id": f"E-{self._emitter_num[i]:03d}", "band_id": int(i),
+                "freq_ghz": round(self._frequency(int(i)), 2),
+                "power_dbm": round(float(self._power[i]), 1),
+                "aoa_deg": round(float(self._aoa[i]), 1),
+                "pulse_width_us": round(float(self.rng.uniform(0.4, 18)), 2),
+                "class": str(CLASSES[self._class_idx[i]]),
                 "threat_level": str(THREAT_LEVELS[self._threat_idx[i]]),
             }
             for i in active_ids
         ]
+
 
     def advance(self) -> dict[str, Any]:
         self.step += 1

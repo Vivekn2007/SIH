@@ -1,0 +1,115 @@
+/* Preserve the original 50px spectrum tiles while reserving enough room for six full rows. */
+.dashboard-grid {
+  grid-template-rows: 680px minmax(300px, auto);
+}
+
+.right-stack {
+  grid-template-rows: 390px 150px 120px;
+}
+
+.radar-body {
+  height: calc(100% - 30px);
+}
+
+.spectrum-panel .bands {
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-rows: 50px;
+}
+
+.spectrum-panel .band {
+  min-width: 0;
+}
+
+.right-stack, .dashboard-grid > *, .radar-canvas { min-width: 0; }
+.emitters-panel { overflow: auto; }
+.radar-panel { display: flex; flex-direction: column; }
+.radar-panel .radar-body { flex: 1; height: auto; min-height: 0; }
+.legend, footer, .header, .panel-head { flex-wrap: wrap; }
+footer, .header, .panel-head { height: auto; min-height: 32px; }
+.kpi .kpi-icon svg { position: static; width: 24px; height: 24px; }
+.kpi .kpi-icon path { fill: none; stroke: currentColor; }
+@media (max-width: 800px) {
+  .kpi-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .chart-controls { flex-wrap: wrap; }
+}
+
+.spectrum-panel .band span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* On compact screens, stack panels rather than cutting off the sixth spectrum column. */
+@media (max-width: 1250px) {
+  body {
+    min-width: 0;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 560px 680px minmax(300px, auto);
+  }
+
+  .right-stack {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .comparison-panel {
+    grid-column: 1;
+    grid-row: 3;
+  }
+}
+
+/* Reserve independent space for the title, plot, and legend. */
+.comparison-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 300px;
+}
+.comparison-panel .panel-head {
+  flex: 0 0 auto;
+  gap: 8px 16px;
+  margin: 0;
+}
+.comparison-panel .chart-wrap {
+  position: relative;
+  flex: 1 0 200px;
+  height: 200px;
+  min-width: 0;
+}
+.comparison-panel .chart-legend {
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  min-height: 18px;
+}
+.chart-controls, .chart-controls .segmented { flex-wrap: wrap; }
+.chart-controls input { width: 58px; }
+.chart-empty {
+  position: absolute;
+  inset: 30px 20px 45px 65px;
+  display: grid;
+  place-items: center;
+  color: #94a3b8;
+  pointer-events: none;
+}
+.log-panel { display: flex; flex-direction: column; }
+.log-panel .panel-head { flex-shrink: 0; gap: 6px; }
+.log-panel .events { flex: 1; min-height: 0; height: auto; }
+.event { align-items: start; }
+.event span { overflow-wrap: anywhere; min-width: 0; }
+.brand { flex-wrap: wrap; min-width: 0; }
+.kpi > div { min-width: 0; }
+.kpi strong { overflow-wrap: anywhere; }
+.map-panel { display: flex; flex-direction: column; }
+.map-panel .panel-head { flex: 0 0 auto; }
+.map-panel .map { flex: 1; min-height: 0; }
+@media (max-width: 600px) {
+  .brand h1 { font-size: 18px; }
+  .brand .online { margin-left: 0; }
+  .spectrum-panel .panel-head small { display: none; }
+  .radar-body { grid-template-columns: minmax(0, 1fr); }
+  .radar-readout { display: none; }
+}
